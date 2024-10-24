@@ -33,5 +33,12 @@ const appendSearchElement = (addresses) => {
             addressName.textContent = element.roadAddress
             searchBox.appendChild(addressName)
         })
+
+        const selectAddress = document.querySelectorAll(".addressChild");
+        selectAddress.forEach((address)=>{
+            address.onclick = (el) => {
+                console.log(el.target.innerHTML)
+            }
+        })
     }
 }
