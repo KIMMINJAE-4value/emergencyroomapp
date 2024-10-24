@@ -11,7 +11,14 @@ search.oninput = (word) => {
             },
             (status, response) => {
                 let result = response.v2
-                // searchBox.removeChild()
+
+                const addressChild = document.querySelectorAll(".addressChild");
+                if(addressChild.length!==0) {
+                    addressChild.forEach((el)=>{
+                        searchBox.removeChild(el)
+                    })
+                }
+
                 appendSearchElement(result.addresses)
             },
         )
@@ -21,9 +28,10 @@ search.oninput = (word) => {
 const appendSearchElement = (addresses) => {
     if(addresses.length>0) {
         addresses.forEach((element)=>{
-            const heading = document.createElement('div');
-            heading.textContent = element.roadAddress
-            searchBox.appendChild(heading);
+            const addressName = document.createElement('div')
+            addressName.classList.add('addressChild')
+            addressName.textContent = element.roadAddress
+            searchBox.appendChild(addressName)
         })
     }
 }
