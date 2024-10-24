@@ -1,7 +1,6 @@
 const search = document.querySelector(".search-query");
 const searchBox = document.querySelector(".searchBox");
-
-// fetch('', {})
+let searchResult
 
 search.oninput = (word) => {
     if (word.target.value !== '') {
@@ -18,7 +17,7 @@ search.oninput = (word) => {
                         searchBox.removeChild(el)
                     })
                 }
-
+                searchResult = result
                 appendSearchElement(result.addresses)
             },
         )
@@ -35,10 +34,22 @@ const appendSearchElement = (addresses) => {
         })
 
         const selectAddress = document.querySelectorAll(".addressChild");
-        selectAddress.forEach((address)=>{
+        selectAddress.forEach((address, index)=>{
             address.onclick = (el) => {
-                console.log(el.target.innerHTML)
+                searchEmergencyRoom(searchResult.addresses, index)
             }
         })
     }
+}
+
+const searchEmergencyRoom = async (addresses, index) => {
+    const params = {
+        Q0: addresses[index].addressElements[0].longName,
+        Q1: addresses[index].addressElements[1].longName !== '' ? addresses[index].addressElements[1].longName : '',
+        pageNo: 1,
+        numOfRows: 10,
+        serviceKey: "https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire"
+    }
+
+    const result = await fetch('', {})
 }
