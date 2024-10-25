@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=y7hgcvgnrx&submodules=geocoder"></script>
+        <script type="text/javascript" th:src="'https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId='+${@environment.getProperty('naver.service.client.id')}+'&submodules=geocoder'"></script>
         <title>Document</title>
     </head>
     <body>

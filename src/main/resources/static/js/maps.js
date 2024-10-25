@@ -8,7 +8,13 @@ const search = document.querySelector(".search-query");
 const searchBox = document.querySelector(".searchBox");
 let markers = []
 let searchResult
+let config
 
+const getApiProperties = async () => {
+    config = await (await fetch('/api/config')).json()
+}
+
+getApiProperties()
 search.oninput = (word) => {
     if (word.target.value !== '') {
         naver.maps.Service.geocode(
@@ -90,11 +96,12 @@ const searchEmergencyRoom = async (addresses, index) => {
         Q1: addresses[index].addressElements[1].longName !== '' ? addresses[index].addressElements[1].longName : '',
         pageNo: 1,
         numOfRows: 10,
-        serviceKey: "Y7vAdTl7q7jOH5H6IKsEyWH0/GEO20KLTe+wxnTDJYmC8ewsrBJ7wIekeCwBMxTvgpNlGbxsvKijRsQN2xcPxQ=="
+        serviceKey: config.serviceKey
     }
 
+
     const queryString = new URLSearchParams(params).toString();
-    const result = await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?${queryString}`, {
+    const result = await fetch(`${config.serviceUrl}?${queryString}`, {
         method: "GET",
     });
 
