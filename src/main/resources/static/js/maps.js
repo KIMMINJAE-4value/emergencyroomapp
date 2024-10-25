@@ -33,7 +33,7 @@ search.oninput = (word) => {
 
 search.onkeyup = (event) => {
     if(event.key==='Enter') {
-        if (searchResult !== undefined) searchEmergencyRoom(searchResult.addresses, 0)
+        if (searchResult !== undefined && searchResult.addresses.length!==0) searchEmergencyRoom(searchResult.addresses, 0)
     }
 }
 
@@ -48,7 +48,7 @@ const appendSearchElement = (addresses) => {
 
         const selectAddress = document.querySelectorAll(".addressChild");
         selectAddress.forEach((address, index)=>{
-            address.onclick = (el) => {
+            address.onclick = () => {
                 searchEmergencyRoom(searchResult.addresses, index)
             }
         })
@@ -75,7 +75,7 @@ const setEventOnMarker = (marker, hospitalName) => {
         content: contentString,
     })
 
-    naver.maps.Event.addListener(marker, 'click', (e) => {
+    naver.maps.Event.addListener(marker, 'click', () => {
         if (infoWindow.getMap()) {
             infoWindow.close()
         } else {
