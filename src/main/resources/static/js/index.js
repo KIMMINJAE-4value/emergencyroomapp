@@ -1,5 +1,6 @@
 const search = document.querySelector(".search-query");
 const searchBox = document.querySelector(".searchBox");
+let markers = []
 let searchResult
 
 search.oninput = (word) => {
@@ -42,6 +43,14 @@ const appendSearchElement = (addresses) => {
     }
 }
 
+const setMaker = (lat, lon) => {
+    const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(lat, lon),
+        map: map
+    });
+    markers.push(marker)
+}
+
 const searchEmergencyRoom = async (addresses, index) => {
     const params = {
         Q0: addresses[index].addressElements[0].longName,
@@ -60,21 +69,19 @@ const searchEmergencyRoom = async (addresses, index) => {
     const xmlParser = new DOMParser()
     const xmlDoc = xmlParser.parseFromString(resultXml, "text/xml")
 
-    let emerGencyRoomInfo = xmlDoc.getElementsByTagName("item")
+    let emergencyRoomInfo = xmlDoc.getElementsByTagName("item")
 
-    console.log(emerGencyRoomInfo)
-    if (emerGencyRoomInfo.length === 0) {
+    markers.forEach((marker)=>{
+        marker.setMap(null)
+    })
+    markers = []
+    if (emergencyRoomInfo.length === 0) {
         alert('데이터가 없습니다.')
-    } else if (emerGencyRoomInfo.length > 1) {
-
+    } else if (emergencyRoomInfo.length > 1) {
+        Array.prototype.forEach.call(emergencyRoomInfo,(el)=>{
+            setMaker(el.getElementsByTagName('wgs84Lat')[0].innerHTML, el.getElementsByTagName('wgs84Lon')[0].innerHTML)
+        })
     } else {
-
+        setMaker(emergencyRoomInfo[0].getElementsByTagName('wgs84Lat')[0].innerHTML, emergencyRoomInfo[0].getElementsByTagName('wgs84Lon')[0].innerHTML)
     }
-
-
-
-    const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(37.3595704, 127.105399),
-        map: map
-    });
 }
