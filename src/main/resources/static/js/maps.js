@@ -92,6 +92,14 @@ const setEventOnMarker = (marker, hospitalName) => {
     })
 }
 
+const refreshMap = () => {
+    if (saveInfoWindow !== undefined) saveInfoWindow.close()
+    markers.forEach((marker)=>{
+        marker.setMap(null)
+    })
+    markers = []
+}
+
 const searchEmergencyRoom = async (addresses, index) => {
     const params = {
         Q0: addresses[index].addressElements[0].longName,
@@ -112,11 +120,8 @@ const searchEmergencyRoom = async (addresses, index) => {
 
     let emergencyRoomInfo = xmlDoc.getElementsByTagName("item")
 
-    if (saveInfoWindow !== undefined) saveInfoWindow.close()
-    markers.forEach((marker)=>{
-        marker.setMap(null)
-    })
-    markers = []
+    refreshMap()
+
     if (emergencyRoomInfo.length === 0) {
         alert('데이터가 없습니다.')
     } else if (emergencyRoomInfo.length > 1) {
