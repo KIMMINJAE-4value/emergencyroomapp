@@ -78,10 +78,14 @@ const searchEmergencyRoom = async (addresses, index) => {
     if (emergencyRoomInfo.length === 0) {
         alert('데이터가 없습니다.')
     } else if (emergencyRoomInfo.length > 1) {
-        Array.prototype.forEach.call(emergencyRoomInfo,(el)=>{
+        Array.prototype.forEach.call(emergencyRoomInfo,(el, index)=>{
+            if(index === 0) map.setCenter(naver.maps.LatLng(el.getElementsByTagName('wgs84Lat')[0].innerHTML, el.getElementsByTagName('wgs84Lon')[0].innerHTML))
             setMaker(el.getElementsByTagName('wgs84Lat')[0].innerHTML, el.getElementsByTagName('wgs84Lon')[0].innerHTML)
+            map.setZoom(12, true)
         })
     } else {
+        map.setCenter(naver.maps.LatLng(emergencyRoomInfo[0].getElementsByTagName('wgs84Lat')[0].innerHTML, emergencyRoomInfo[0].getElementsByTagName('wgs84Lon')[0].innerHTML))
         setMaker(emergencyRoomInfo[0].getElementsByTagName('wgs84Lat')[0].innerHTML, emergencyRoomInfo[0].getElementsByTagName('wgs84Lon')[0].innerHTML)
+        map.setZoom(12, true)
     }
 }
