@@ -50,11 +50,31 @@ const searchEmergencyRoom = async (addresses, index) => {
         numOfRows: 10,
         serviceKey: "Y7vAdTl7q7jOH5H6IKsEyWH0/GEO20KLTe+wxnTDJYmC8ewsrBJ7wIekeCwBMxTvgpNlGbxsvKijRsQN2xcPxQ=="
     }
-    const queryString = new URLSearchParams(params).toString();
 
+    const queryString = new URLSearchParams(params).toString();
     const result = await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?${queryString}`, {
         method: "GET",
     });
 
-    console.log(result)
+    const resultXml = await result.text()
+    const xmlParser = new DOMParser()
+    const xmlDoc = xmlParser.parseFromString(resultXml, "text/xml")
+
+    let emerGencyRoomInfo = xmlDoc.getElementsByTagName("item")
+
+    console.log(emerGencyRoomInfo)
+    if (emerGencyRoomInfo.length === 0) {
+        alert('데이터가 없습니다.')
+    } else if (emerGencyRoomInfo.length > 1) {
+
+    } else {
+
+    }
+
+
+
+    const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(37.3595704, 127.105399),
+        map: map
+    });
 }
