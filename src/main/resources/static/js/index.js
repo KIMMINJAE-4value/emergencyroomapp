@@ -48,8 +48,13 @@ const searchEmergencyRoom = async (addresses, index) => {
         Q1: addresses[index].addressElements[1].longName !== '' ? addresses[index].addressElements[1].longName : '',
         pageNo: 1,
         numOfRows: 10,
-        serviceKey: "https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire"
+        serviceKey: "Y7vAdTl7q7jOH5H6IKsEyWH0/GEO20KLTe+wxnTDJYmC8ewsrBJ7wIekeCwBMxTvgpNlGbxsvKijRsQN2xcPxQ=="
     }
+    const queryString = new URLSearchParams(params).toString();
 
-    const result = await fetch('', {})
+    const result = await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?${queryString}`, {
+        method: "GET",
+    });
+
+    console.log(result)
 }
