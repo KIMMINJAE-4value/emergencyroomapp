@@ -31,6 +31,12 @@ search.oninput = (word) => {
     }
 }
 
+search.onkeyup = (event) => {
+    if(event.key==='Enter') {
+        if (searchResult !== undefined) searchEmergencyRoom(searchResult.addresses, 0)
+    }
+}
+
 const appendSearchElement = (addresses) => {
     if(addresses.length>0) {
         addresses.forEach((element)=>{
