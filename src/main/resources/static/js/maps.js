@@ -57,6 +57,27 @@ const setMaker = (lat, lon) => {
     markers.push(marker)
 }
 
+const setEventOnMarker = (marker, hospitalName) => {
+    let contentString = [
+        '<div class="iw_inner">',
+        '   <h3>' + hospitalName + '</h3>',
+
+        '</div>',
+    ].join('')
+
+    let infoWindow = new naver.maps.InfoWindow({
+        content: contentString,
+    })
+
+    naver.maps.Event.addListener(marker, 'click', (e) => {
+        if (infoWindow.getMap()) {
+            infoWindow.close()
+        } else {
+            infoWindow.open(map, marker)
+        }
+    })
+}
+
 const searchEmergencyRoom = async (addresses, index) => {
     const params = {
         Q0: addresses[index].addressElements[0].longName,
@@ -87,11 +108,13 @@ const searchEmergencyRoom = async (addresses, index) => {
         Array.prototype.forEach.call(emergencyRoomInfo,(el, index)=>{
             if(index === 0) map.setCenter(naver.maps.LatLng(el.getElementsByTagName('wgs84Lat')[0].innerHTML, el.getElementsByTagName('wgs84Lon')[0].innerHTML))
             setMaker(el.getElementsByTagName('wgs84Lat')[0].innerHTML, el.getElementsByTagName('wgs84Lon')[0].innerHTML)
-            map.setZoom(12, true)
+            setEventOnMarker(markers[index], el.getElementsByTagName('dutyName')[0].innerHTML)
         })
+        map.setZoom(12, true)
     } else {
         map.setCenter(naver.maps.LatLng(emergencyRoomInfo[0].getElementsByTagName('wgs84Lat')[0].innerHTML, emergencyRoomInfo[0].getElementsByTagName('wgs84Lon')[0].innerHTML))
         setMaker(emergencyRoomInfo[0].getElementsByTagName('wgs84Lat')[0].innerHTML, emergencyRoomInfo[0].getElementsByTagName('wgs84Lon')[0].innerHTML)
+        setEventOnMarker(markers[0], emergencyRoomInfo[0].getElementsByTagName('dutyName')[0].innerHTML)
         map.setZoom(12, true)
     }
 }
