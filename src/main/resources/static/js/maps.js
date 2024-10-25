@@ -9,12 +9,13 @@ const searchBox = document.querySelector(".searchBox");
 let markers = []
 let searchResult
 let config
+let saveInfoWindow
 
 const getApiProperties = async () => {
     config = await (await fetch('/api/config')).json()
 }
-
 getApiProperties()
+
 search.oninput = (word) => {
     if (word.target.value !== '') {
         naver.maps.Service.geocode(
@@ -81,6 +82,7 @@ const setEventOnMarker = (marker, hospitalName) => {
         content: contentString,
     })
 
+    saveInfoWindow = infoWindow
     naver.maps.Event.addListener(marker, 'click', () => {
         if (infoWindow.getMap()) {
             infoWindow.close()
@@ -99,7 +101,6 @@ const searchEmergencyRoom = async (addresses, index) => {
         serviceKey: config.serviceKey
     }
 
-
     const queryString = new URLSearchParams(params).toString();
     const result = await fetch(`${config.serviceUrl}?${queryString}`, {
         method: "GET",
@@ -111,6 +112,7 @@ const searchEmergencyRoom = async (addresses, index) => {
 
     let emergencyRoomInfo = xmlDoc.getElementsByTagName("item")
 
+    if (saveInfoWindow !== undefined) saveInfoWindow.close()
     markers.forEach((marker)=>{
         marker.setMap(null)
     })
