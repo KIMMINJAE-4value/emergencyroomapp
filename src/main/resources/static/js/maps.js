@@ -9,7 +9,7 @@ const searchBox = document.querySelector(".searchBox");
 let markers = []
 let searchResult
 let config
-let saveInfoWindow
+let saveInfoWindows = []
 
 const getApiProperties = async () => {
     config = await (await fetch('/api/config')).json()
@@ -82,7 +82,7 @@ const setEventOnMarker = (marker, hospitalName) => {
         content: contentString,
     })
 
-    saveInfoWindow = infoWindow
+    saveInfoWindows.push(infoWindow)
     naver.maps.Event.addListener(marker, 'click', () => {
         if (infoWindow.getMap()) {
             infoWindow.close()
@@ -93,7 +93,12 @@ const setEventOnMarker = (marker, hospitalName) => {
 }
 
 const refreshMap = () => {
-    if (saveInfoWindow !== undefined) saveInfoWindow.close()
+    if (saveInfoWindows.length > 0) {
+        saveInfoWindows.forEach(infoWindow => {
+            infoWindow.close()
+        })
+        saveInfoWindows = []
+    }
     markers.forEach((marker)=>{
         marker.setMap(null)
     })
